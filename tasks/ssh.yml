@@ -1,5 +1,7 @@
 ---
 - name: Update SSH configuration to be more secure.
+  become: yes
+  become_user: root
   lineinfile:
     dest: "{{ security_ssh_config_path }}"
     regexp: "{{ item.regexp }}"
@@ -25,6 +27,8 @@
   notify: restart ssh
 
 - name: Add configured user accounts to passwordless sudoers.
+  become: yes
+  become_user: root
   lineinfile:
     dest: /etc/sudoers
     regexp: '^{{ item }}'
@@ -35,6 +39,8 @@
   when: security_sudoers_passwordless | length > 0
 
 - name: Add configured user accounts to passworded sudoers.
+  become: yes
+  become_user: root
   lineinfile:
     dest: /etc/sudoers
     regexp: '^{{ item }}'
